@@ -2,6 +2,10 @@ require 'sinatra'
 require 'json'
 require 'mongoid'
 require './models/app_version'
+require './models/user'
+require './models/favor'
+require './models/favor_response'
+require './models/favor_transaction'
 
 Mongoid.load!("config/mongoid.yml")
 
