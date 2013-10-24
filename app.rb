@@ -1,14 +1,9 @@
 require 'sinatra'
 require 'json'
 require 'mongoid'
+require './models/app_version'
 
 Mongoid.load!("config/mongoid.yml")
-
-class AppVersion
-  include Mongoid::Document
-  field :name, type: String
-  field :version, type: String
-end
 
 get '/' do
   AppVersion.all.first.to_json
