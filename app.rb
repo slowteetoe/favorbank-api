@@ -1,5 +1,6 @@
 require 'sinatra'
+require 'json'
 
 get '/' do
-  "Hello world"
+  {"app" => "favorbank", "version" => 0.02 }.to_json
 end
