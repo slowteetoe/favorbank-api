@@ -17,3 +17,52 @@ get '/init' do
   AppVersion.all.destroy
   AppVersion.create({:name => 'FavorBank-API', :version => 0.3})
 end
+
+get '/users' do
+
+end
+
+post '/users' do
+
+end
+
+put '/users' do
+
+end
+
+get '/users/:id' do
+
+end
+
+get '/users/:id/transactions' do
+
+end
+
+get '/users/:id/favors' do
+
+end
+
+get '/search' do
+
+end
+
+get '/favors/:id' do
+
+end
+
+post '/favors' do
+
+end 
+
+put '/favors/:id' do
+
+end
+
+get '/favors/:id/responses' do
+
+end
+     
+post 'favors/:id/responses' do
+
+end          
+
