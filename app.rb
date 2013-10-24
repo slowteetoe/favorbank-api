@@ -6,6 +6,10 @@ require './models/app_version'
 Mongoid.load!("config/mongoid.yml")
 
 get '/' do
+  "FavorBank API"
+end
+
+get '/info' do
   AppVersion.all.first.to_json
 end
 
