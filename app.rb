@@ -23,11 +23,13 @@ get '/init' do
 end
 
 get '/users' do
-
+  User.all.to_json
 end
 
 post '/users' do
-
+  User.create({
+    :name => params[:name]
+  })
 end
 
 put '/users' do
