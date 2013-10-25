@@ -4,8 +4,6 @@ class User
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
-  index_name "users-#{ENV['RACK_ENV'] || "unknown"}"
-
   mapping do
     indexes :name, :analyzer => 'snowball', :boost => 100
   end

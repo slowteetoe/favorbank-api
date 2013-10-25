@@ -72,3 +72,7 @@ production:
         # low amounts for fast failures.
         max_retries: 1
         retry_interval: 0
+          # Configure Mongoid specific options. (optional)
+  options:
+    # Enable the identity map, needed for eager loading. (default: false)
+    identity_map_enabled: true
