@@ -20,6 +20,7 @@ ENV['ELASTICSEARCH_URL'] = ENV['SEARCHBOX_URL'] || "http://localhost:9200"
 
 Tire.configure do
   url ENV['ELASTICSEARCH_URL'] 
+  logger 'elasticsearch.log', :level => 'debug'
 end
 
 get '/' do
@@ -32,7 +33,7 @@ end
 
 get '/init' do
   AppVersion.all.destroy
-  AppVersion.create({:name => 'FavorBank-API', :version => 0.3})
+  AppVersion.create({:name => 'FavorBank-API', :version => 0.4})
 
   User.all.destroy
   Favor.all.destroy
@@ -41,22 +42,40 @@ get '/init' do
     :email => 'warnero@gmail.com',
     :locality => 'Las Vegas, NV 89104'
   })
-  batch = [
-    {
+  john = User.create({
+    :name => 'John Smithee'
+  })
+  nancy = User.create({
+    :name => 'Nancy Drew'
+  })
+  response = FavorResponse.create({
+    :body => 'I would totally like to help you out with that!'
+  })
+  response.user = john
+  response.save!
+  nancy_response = FavorResponse.create({
+    :body => 'I can help on tuesday with that.'
+  })
+  nancy_response.user = nancy
+  nancy_response.save!
+  Favor.create({
       :type => "request",
       :description => "I need a ride home tomorrow afternoon from work",
       :locality => "Las Vegas 89102",
       :amount => 3,
       :user_id => warner._id
-    }, 
-    {
+  })
+  f = Favor.create({ 
       :type => "offer",
       :description => "Teach you MongoDB basics",
       :locality => "Las Vegas 89104",
       :amount => 3,
-      :user_id => warner._id
-    }]  
-  Favor.collection.insert(batch)
+      :user_id => warner._id,
+  })
+  f.favor_responses << response
+  f.favor_responses << nancy_response
+  f.save!
+  response.save!
   "ok"
 end
 
@@ -89,7 +108,20 @@ get '/users/:id/favors' do
 end
 
 get '/search' do
+  q = params[:q]
+  r = Favor.tire.search( load: true ) do
+    query { string "#{q}*", default_operator: "OR" }
+  end
 
+  # result = []
+  # r.each do |f|
+  #   this_favor = Favor.includes("favor_responses", "user").find(f.id)
+  #   result << {
+  #     :favor => this_favor,
+  #     :responses => this_favor.favor_responses
+  #   }
+  # end
+  r.to_json
 end
 
 get '/favors/:id' do
