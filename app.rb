@@ -18,6 +18,10 @@ Mongoid.load!("config/mongoid.yml")
 
 ENV['ELASTICSEARCH_URL'] = ENV['SEARCHBOX_URL'] || "http://localhost:9200"
 
+Tire.configure do
+  url ENV['ELASTICSEARCH_URL'] 
+end
+
 get '/' do
   "FavorBank API #{ENV['RACK_ENV']}"
 end
