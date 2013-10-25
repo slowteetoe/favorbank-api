@@ -1,6 +1,8 @@
 require 'sinatra'
 require 'json'
 require 'mongoid'
+require 'tire'
+require 'yajl/json_gem'
 require './models/app_version'
 require './models/user'
 require './models/favor'
@@ -10,7 +12,7 @@ require './models/favor_transaction'
 Mongoid.load!("config/mongoid.yml")
 
 get '/' do
-  "FavorBank API"
+  "FavorBank API #{ENV['RACK_ENV']}"
 end
 
 get '/info' do
