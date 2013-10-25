@@ -7,6 +7,11 @@ require './models/favor'
 require './models/favor_response'
 require './models/favor_transaction'
 
+Mongoid.logger = Logger.new($stdout)
+Moped.logger = Logger.new($stdout)
+
+Mongoid.logger.level = Logger::DEBUG
+Moped.logger.level = Logger::DEBUG  
 Mongoid.load!("config/mongoid.yml")
 
 get '/' do
@@ -20,6 +25,31 @@ end
 get '/init' do
   AppVersion.all.destroy
   AppVersion.create({:name => 'FavorBank-API', :version => 0.3})
+
+  User.all.destroy
+  Favor.all.destroy
+  warner = User.create({
+    :name => 'Warner Onstine', 
+    :email => 'warnero@gmail.com',
+    :locality => 'Las Vegas, NV 89104'
+  })
+  batch = [
+    {
+      :type => "request",
+      :description => "I need a ride home tomorrow afternoon from work",
+      :locality => "Las Vegas 89102",
+      :amount => 3,
+      :user_id => warner._id
+    }, 
+    {
+      :type => "offer",
+      :description => "Teach you MongoDB basics",
+      :locality => "Las Vegas 89104",
+      :amount => 3,
+      :user_id => warner._id
+    }]  
+  Favor.collection.insert(batch)
+  "ok"
 end
 
 get '/users' do
@@ -37,7 +67,8 @@ put '/users' do
 end
 
 get '/users/:id' do
-
+  id = params[:id]
+  User.find_by(_id: id).to_json
 end
 
 get '/users/:id/transactions' do
@@ -45,7 +76,8 @@ get '/users/:id/transactions' do
 end
 
 get '/users/:id/favors' do
-
+  id = params[:id]
+  Favor.where("user_id" => id).to_json
 end
 
 get '/search' do
@@ -53,11 +85,17 @@ get '/search' do
 end
 
 get '/favors/:id' do
-
+  id = params[:id]
+  Favor.where(_id: id).to_json
 end
 
 post '/favors' do
-
+  Flavor.create({
+    :type => params[:type],
+    :description => params[:description],
+    :locality => params[:locality],
+    :user_id => params[:user_id]
+  })
 end 
 
 put '/favors/:id' do

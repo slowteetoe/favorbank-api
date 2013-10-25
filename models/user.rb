@@ -2,7 +2,7 @@ class User
   include Mongoid::Document
   field :name, type: String
   field :email, type: String
-  field :description, type: String
+  field :bio, type: String
   field :avatar, type: String
   field :locality, type: String
   field :token, type: String 
