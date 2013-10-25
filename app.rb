@@ -48,16 +48,7 @@ get '/init' do
   nancy = User.create({
     :name => 'Nancy Drew'
   })
-  response = FavorResponse.create({
-    :body => 'I would totally like to help you out with that!'
-  })
-  response.user = john
-  response.save!
-  nancy_response = FavorResponse.create({
-    :body => 'I can help on tuesday with that.'
-  })
-  nancy_response.user = nancy
-  nancy_response.save!
+
   Favor.create({
       :type => "request",
       :description => "I need a ride home tomorrow afternoon from work",
@@ -72,8 +63,22 @@ get '/init' do
       :amount => 3,
       :user_id => warner._id,
   })
-  f.favor_responses << response
-  f.favor_responses << nancy_response
+
+  response = FavorResponse.create({
+    :favor => f,
+    :body => 'I would totally like to help you out with that!'
+  })
+  response.user = john
+  response.save!
+  nancy_response = FavorResponse.create({
+    :favor => f,
+    :body => 'I can help on tuesday with that.'
+  })
+  nancy_response.user = nancy
+  nancy_response.save!
+  
+  #f.favor_responses << response
+  #f.favor_responses << nancy_response
   f.save!
   response.save!
   "ok"
@@ -95,7 +100,8 @@ end
 
 get '/users/:id' do
   id = params[:id]
-  User.find_by(_id: id).to_json
+  u = User.includes(:favors, :debit_transactions, :credit_transactions).find_by(_id: id)
+  u.to_json(include: ["favors", "credit_transactions", "debit_transactions"])
 end
 
 get '/users/:id/transactions' do
@@ -113,20 +119,17 @@ get '/search' do
     query { string "#{q}*", default_operator: "OR" }
   end
 
-  # result = []
-  # r.each do |f|
-  #   this_favor = Favor.includes("favor_responses", "user").find(f.id)
-  #   result << {
-  #     :favor => this_favor,
-  #     :responses => this_favor.favor_responses
-  #   }
-  # end
-  r.to_json
+  result = []
+  r.each do |f|
+    this_favor = Favor.includes("user").find(f.id)
+    result << JSON.parse(this_favor.to_json(include: ["user", "favor_responses"]))
+  end
+  result.to_json
 end
 
 get '/favors/:id' do
   id = params[:id]
-  Favor.where(_id: id).to_json
+  Favor.includes(:user).where(_id: id).to_json(include: ["user"])
 end
 
 post '/favors' do
