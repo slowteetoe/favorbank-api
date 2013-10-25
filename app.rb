@@ -11,6 +11,8 @@ require './models/favor_transaction'
 
 Mongoid.load!("config/mongoid.yml")
 
+ENV['ELASTICSEARCH_URL'] = ENV['SEARCHBOX_URL'] || "http://localhost:9200"
+
 get '/' do
   "FavorBank API #{ENV['RACK_ENV']}"
 end
