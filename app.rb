@@ -122,7 +122,7 @@ get '/search' do
   result = []
   r.each do |f|
     this_favor = Favor.includes("user").find(f.id)
-    result << JSON.parse(this_favor.to_json(include: ["user", "favor_responses"]))
+    result << JSON.parse(this_favor.to_json(include: ["user"]))
   end
   result.to_json
 end
