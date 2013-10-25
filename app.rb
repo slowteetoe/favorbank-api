@@ -37,50 +37,73 @@ get '/init' do
 
   User.all.destroy
   Favor.all.destroy
+
+  # Users
   warner = User.create({
     :name => 'Warner Onstine', 
     :email => 'warnero@gmail.com',
     :locality => 'Las Vegas, NV 89104'
   })
-  john = User.create({
-    :name => 'John Smithee'
+  markc = User.create({
+    :name => 'Mark Cicoria', 
+    :email => 'mark.d.cicoria@gmail.com',
+    :locality => 'Las Vegas, NV 89104'
   })
-  nancy = User.create({
-    :name => 'Nancy Drew'
+  davidryal = User.create({
+    :name => 'David Anderson', 
+    :email => 'davidryal@gmail.com',
+    :locality => 'Las Vegas, NV 89104'
+  })
+  angrydan = User.create({
+    :name => 'Dan Ebel', 
+    :email => 'sustainebel@gmail.com',
+    :locality => 'Las Vegas, NV 89104'
+  })
+  slowteetoe = User.create({
+    :name => 'Steven Lotito', 
+    :email => 'steven.lotito@alumni.pitt.edu',
+    :locality => 'Las Vegas, NV 89104'
+  })
+  romeshk = User.create({
+    :name => 'Romesh Khaddar', 
+    :email => 'romesh.khaddar@gmail.com',
+    :locality => 'Las Vegas, NV 89104'
   })
 
-  Favor.create({
-      :type => "request",
-      :description => "I need a ride home tomorrow afternoon from work",
-      :locality => "Las Vegas 89102",
+  # Favors
+  f = Favor.create({
+      :type => "offer",
+      :description => "I'll be your barber, as long as you need a buzz cut!",
+      :locality => "Las Vegas Metro",
       :amount => 3,
       :user_id => warner._id
   })
-  f = Favor.create({ 
-      :type => "offer",
-      :description => "Teach you MongoDB basics",
-      :locality => "Las Vegas 89104",
-      :amount => 3,
-      :user_id => warner._id,
-  })
-
-  response = FavorResponse.create({
+  # Responses to favor
+  FavorResponse.create({
     :favor => f,
-    :body => 'I would totally like to help you out with that!'
+    :body => 'I would totally like to help you out with that!',
+    :user_id => markc._id
   })
-  response.user = john
-  response.save!
-  nancy_response = FavorResponse.create({
+  FavorResponse.create({
     :favor => f,
-    :body => 'I can help on tuesday with that.'
+    :body => 'I have less hair than you, but give it a try',
+    :user_id => davidryal._id
   })
-  nancy_response.user = nancy
-  nancy_response.save!
-  
-  #f.favor_responses << response
-  #f.favor_responses << nancy_response
-  f.save!
-  response.save!
+  FavorResponse.create({
+    :favor => f,
+    :body => "OMG can you make me look like you?",
+    :user_id => angrydan._id
+  })
+  FavorResponse.create({
+    :favor => f,
+    :body => "Long hair, don't care",
+    :user_id => slowteetoe._id
+  })
+  FavorResponse.create({
+    :favor => f,
+    :body => "UNLV is making me cut my ponytail, sigh.",
+    :user_id => romeshk._id
+  })
   "ok"
 end
 
