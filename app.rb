@@ -20,7 +20,7 @@ ENV['ELASTICSEARCH_URL'] = ENV['SEARCHBOX_URL'] || "http://localhost:9200"
 
 Tire.configure do
   url ENV['ELASTICSEARCH_URL'] 
-  logger 'elasticsearch.log', :level => 'debug'
+  logger $stdout, :level => 'debug'
 end
 
 get '/' do
