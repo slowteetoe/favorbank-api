@@ -113,15 +113,12 @@ get '/search' do
     query { string "#{q}*", default_operator: "OR" }
   end
 
-  # result = []
-  # r.each do |f|
-  #   this_favor = Favor.includes("favor_responses", "user").find(f.id)
-  #   result << {
-  #     :favor => this_favor,
-  #     :responses => this_favor.favor_responses
-  #   }
-  # end
-  r.to_json
+  result = []
+  r.each do |f|
+    this_favor = Favor.includes("favor_responses", "user").find(f.id)
+    result << JSON.parse(this_favor.to_json(include: ["user", "favor_responses"]))
+  end
+  result.to_json
 end
 
 get '/favors/:id' do
