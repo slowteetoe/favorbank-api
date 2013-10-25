@@ -20,6 +20,7 @@ class Favor
   end
 
   field :type, type: String
+  field :title, type: String
   field :description, type: String
   field :locality, type: String
   field :completed, type: Boolean

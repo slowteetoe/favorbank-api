@@ -51,14 +51,16 @@ get '/init' do
 
   Favor.create({
       :type => "request",
-      :description => "I need a ride home tomorrow afternoon from work",
+      :title => "I need a ride home tomorrow afternoon from work",
+      :description => "Unfortunately my car broke down and I could really use a ride",
       :locality => "Las Vegas 89102",
       :amount => 3,
       :user_id => warner._id
   })
   f = Favor.create({ 
       :type => "offer",
-      :description => "Teach you MongoDB basics",
+      :title => "Teach you MongoDB basics",
+      :description => "I love MongoDB and I'll teach how to love it as well.",
       :locality => "Las Vegas 89104",
       :amount => 3,
       :user_id => warner._id,
@@ -133,7 +135,7 @@ get '/favors/:id' do
 end
 
 post '/favors' do
-  Flavor.create({
+  Favor.create({
     :type => params[:type],
     :description => params[:description],
     :locality => params[:locality],
