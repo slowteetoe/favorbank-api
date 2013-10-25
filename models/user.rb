@@ -1,5 +1,15 @@
 class User
   include Mongoid::Document
+
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+
+  index_name "users-#{ENV['RACK_ENV'] || "unknown"}"
+
+  mapping do
+    indexes :name, :analyzer => 'snowball', :boost => 100
+  end
+
   field :name, type: String
   field :email, type: String
   field :bio, type: String

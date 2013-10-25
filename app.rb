@@ -1,6 +1,8 @@
 require 'sinatra'
 require 'json'
 require 'mongoid'
+require 'tire'
+require 'yajl/json_gem'
 require './models/app_version'
 require './models/user'
 require './models/favor'
@@ -14,8 +16,10 @@ Mongoid.logger.level = Logger::DEBUG
 Moped.logger.level = Logger::DEBUG  
 Mongoid.load!("config/mongoid.yml")
 
+ENV['ELASTICSEARCH_URL'] = ENV['SEARCHBOX_URL'] || "http://localhost:9200"
+
 get '/' do
-  "FavorBank API"
+  "FavorBank API #{ENV['RACK_ENV']}"
 end
 
 get '/info' do
